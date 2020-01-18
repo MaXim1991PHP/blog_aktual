@@ -39,7 +39,7 @@ class Blog extends AbstractController
      */
     public function savePost()
     {
-        var_dump('Post saved'); die;
+        var_dump($_POST); die;
     }
     
     /**
