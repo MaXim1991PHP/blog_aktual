@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+///use Symfony\ORM\EntityManagerInterface;
+use App\Entity\Post;
 
 
 
@@ -13,7 +15,13 @@ class Blog extends AbstractController
      */
     public function listPosts()
     {
-        return $this->render('posts/list.html.twig');
+        $em=$this->getDoctrine()->getManager();
+        
+        $posts = $em->getRepository(Post::class)->findAll();
+        
+        return $this->render('posts/list.html.twig', [
+            "posts"=> $posts
+        ]);
     }
     
     
@@ -39,7 +47,25 @@ class Blog extends AbstractController
      */
     public function savePost()
     {
-        var_dump($_POST); die;
+        
+        $title=$_POST['title'];
+        $description=$_POST['description'];
+        
+        
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $Post = new Post();
+        
+        $Post->setTitle($title);
+        $Post->setDescription($description);
+        
+        $em->persist($Post);
+        $em->flush();
+        
+        return $this->render('posts/success.html.twig');
+         
+        
     }
     
     /**
